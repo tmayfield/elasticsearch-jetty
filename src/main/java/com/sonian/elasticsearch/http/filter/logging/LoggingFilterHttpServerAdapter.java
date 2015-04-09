@@ -49,11 +49,15 @@ public class LoggingFilterHttpServerAdapter implements FilterHttpServerAdapter {
 
     private final String clusterName;
 
+    private final boolean detailedErrorsEnabled;
+
     @Inject
     public LoggingFilterHttpServerAdapter(Settings settings, @Assisted String name, @Assisted Settings filterSettings,
                                           RequestLoggingLevelSettings requestLoggingLevelSettings, ClusterName clusterName) {
         String loggerName = filterSettings.get("logger", Classes.getPackageName(getClass()));
         this.logFormat = filterSettings.get("format", "text");
+        this.detailedErrorsEnabled = settings.getAsBoolean("http.detailed_errors.enabled", true);
+
         if (logFormat.equals("json")) {
             this.logger = Loggers.getLogger(loggerName);
         } else {
@@ -74,7 +78,7 @@ public class LoggingFilterHttpServerAdapter implements FilterHttpServerAdapter {
     public void doFilter(HttpRequest request, HttpChannel channel, FilterChain filterChain) {
         RequestLoggingLevel level = requestLoggingLevelSettings.getLoggingLevel(request.method(), request.path());
         if (level.shouldLog(logger)) {
-            filterChain.doFilter(request, new LoggingHttpChannel(request, channel, this.logFormat, level.logBody()));
+            filterChain.doFilter(request, new LoggingHttpChannel(request, channel, this.logFormat, level.logBody(), detailedErrorsEnabled));
         } else {
             filterChain.doFilter(request, channel);
         }
@@ -135,8 +139,8 @@ public class LoggingFilterHttpServerAdapter implements FilterHttpServerAdapter {
 
         private final String opaqueId;
 
-        public LoggingHttpChannel(HttpRequest request, HttpChannel channel, String format, boolean logBody) {
-            super(request);
+        public LoggingHttpChannel(HttpRequest request, HttpChannel channel, String format, boolean logBody, boolean detailedErrorsEnabled) {
+            super(request, detailedErrorsEnabled);
             this.channel = channel;
             this.request = request;
 

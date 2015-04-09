@@ -64,7 +64,7 @@ public class JettyHttpServerTransportHandler extends AbstractHandler {
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpServerAdapter adapter = getTransport().httpServerAdapter();
         JettyHttpServerRestRequest restRequest = new JettyHttpServerRestRequest(request);
-        JettyHttpServerRestChannel restChannel = new JettyHttpServerRestChannel(restRequest, response);
+        JettyHttpServerRestChannel restChannel = new JettyHttpServerRestChannel(restRequest, response, getTransport().detailedErrorsEnabled());
         try {
             adapter.dispatchRequest(restRequest, restChannel);
             restChannel.await();

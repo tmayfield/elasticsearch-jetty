@@ -68,6 +68,8 @@ public class JettyHttpServerTransport extends AbstractLifecycleComponent<HttpSer
 
     private final Client client;
 
+    private final boolean detailedErrorsEnabled;
+
     private volatile BoundTransportAddress boundAddress;
 
     private volatile Server jettyServer;
@@ -85,6 +87,7 @@ public class JettyHttpServerTransport extends AbstractLifecycleComponent<HttpSer
         this.publishHost = componentSettings.get("publish_host", settings.get("http.publish_host", settings.get("http.host")));
         this.jettyConfig = componentSettings.getAsArray("config", new String[]{"jetty.xml"});
         this.jettyConfigServerId = componentSettings.get("server_id", "ESServer");
+        this.detailedErrorsEnabled = componentSettings.getAsBoolean("http.detailed_errors.enabled", true);
         this.loggerWrapper = loggerWrapper;
         this.clusterName = clusterName;
         this.client = client;
@@ -248,6 +251,8 @@ public class JettyHttpServerTransport extends AbstractLifecycleComponent<HttpSer
     public HttpServerAdapter httpServerAdapter() {
         return httpServerAdapter;
     }
+
+    public boolean detailedErrorsEnabled() { return detailedErrorsEnabled; }
 
     public Settings settings() {
         return settings;
