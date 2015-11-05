@@ -166,4 +166,8 @@ public class JettyHttpServerRestRequest extends HttpRequest {
     public String opaqueId() {
         return this.opaqueId;
     }
+
+    public HttpServletRequest getRequest() {
+        return request;
+    }
 }
