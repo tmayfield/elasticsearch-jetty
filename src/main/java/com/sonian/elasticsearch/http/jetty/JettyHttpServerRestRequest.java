@@ -57,7 +57,8 @@ public class JettyHttpServerRestRequest extends HttpRequest {
             RestUtils.decodeQueryString(request.getQueryString(), 0, params);
         }
 
-        content = new BytesArray(Streams.copyToByteArray(request.getInputStream()));
+        //content = new BytesArray(Streams.copyToByteArray(request.getInputStream()));
+        content = new BytesArray(Streams.copyToString(request.getReader()));
         request.setAttribute(REQUEST_CONTENT_ATTRIBUTE, content);
     }
 
@@ -86,10 +87,6 @@ public class JettyHttpServerRestRequest extends HttpRequest {
 
     @Override public boolean hasContent() {
         return content.length() > 0;
-    }
-
-    @Override public boolean contentUnsafe() {
-        return false;
     }
 
     @Override
