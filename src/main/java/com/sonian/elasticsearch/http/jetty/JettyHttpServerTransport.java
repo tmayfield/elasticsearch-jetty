@@ -31,13 +31,18 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.BoundTransportAddress;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.transport.PortsRange;
+import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.env.Environment;
 import org.elasticsearch.http.*;
 import org.elasticsearch.transport.BindTransportException;
 
+import com.beust.jcommander.internal.Lists;
+
 import java.io.File;
 import java.net.*;
 import java.nio.channels.ServerSocketChannel;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -111,6 +116,7 @@ public class JettyHttpServerTransport extends AbstractLifecycleComponent<HttpSer
 
                     for (int i = 0; i < jettyConfig.length; i++) {
                         String configFile = jettyConfig[i];
+                        
                         URL config = environment.resolveConfig(configFile);
                         XmlConfiguration xmlConfiguration = new XmlConfiguration(config);
 
@@ -185,9 +191,12 @@ public class JettyHttpServerTransport extends AbstractLifecycleComponent<HttpSer
             } catch (Exception e) {
                 throw new BindTransportException("Failed to resolve publish address", e);
             }
-            this.boundAddress = new BoundTransportAddress(new InetSocketTransportAddress(jettyBoundAddress), new InetSocketTransportAddress(publishAddress));
+            TransportAddress[] boundAddresses = new TransportAddress[1];
+            boundAddresses[0] = new InetSocketTransportAddress(jettyBoundAddress);
+            this.boundAddress = new BoundTransportAddress(boundAddresses, new InetSocketTransportAddress(publishAddress));
+            
         } else {
-            throw new BindHttpException("Failed to find a jetty connector with Inet transport");
+            throw new HttpException("Failed to find a jetty connector with Inet transport");
         }
     }
 
