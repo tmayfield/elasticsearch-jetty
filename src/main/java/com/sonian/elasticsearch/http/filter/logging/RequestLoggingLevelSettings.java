@@ -19,6 +19,7 @@ import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.component.AbstractComponent;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.path.PathTrie;
+import org.elasticsearch.common.path.PathTrie.Decoder;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.rest.RestRequest;
 
@@ -26,12 +27,20 @@ import org.elasticsearch.rest.RestRequest;
  * @author imotov
  */
 public class RequestLoggingLevelSettings extends AbstractComponent {
-    private final PathTrie<RequestLoggingLevel> getLoggingLevels = new PathTrie<RequestLoggingLevel>();
-    private final PathTrie<RequestLoggingLevel> postLoggingLevels = new PathTrie<RequestLoggingLevel>();
-    private final PathTrie<RequestLoggingLevel> putLoggingLevels = new PathTrie<RequestLoggingLevel>();
-    private final PathTrie<RequestLoggingLevel> deleteLoggingLevels = new PathTrie<RequestLoggingLevel>();
-    private final PathTrie<RequestLoggingLevel> optionsLoggingLevels = new PathTrie<RequestLoggingLevel>();
-    private final PathTrie<RequestLoggingLevel> headLoggingLevels = new PathTrie<RequestLoggingLevel>();
+    
+    public static final Decoder NO_DECODER = new Decoder() {
+        @Override
+        public String decode(String value) {
+            return value;
+        }
+    };
+    
+    private final PathTrie<RequestLoggingLevel> getLoggingLevels = new PathTrie<RequestLoggingLevel>('/', "*", NO_DECODER);
+    private final PathTrie<RequestLoggingLevel> postLoggingLevels = new PathTrie<RequestLoggingLevel>('/', "*", NO_DECODER);
+    private final PathTrie<RequestLoggingLevel> putLoggingLevels = new PathTrie<RequestLoggingLevel>('/', "*", NO_DECODER);
+    private final PathTrie<RequestLoggingLevel> deleteLoggingLevels = new PathTrie<RequestLoggingLevel>('/', "*", NO_DECODER);
+    private final PathTrie<RequestLoggingLevel> optionsLoggingLevels = new PathTrie<RequestLoggingLevel>('/', "*", NO_DECODER);
+    private final PathTrie<RequestLoggingLevel> headLoggingLevels = new PathTrie<RequestLoggingLevel>('/', "*", NO_DECODER);
 
     private volatile RequestLoggingLevel defaultLoggingLevel;
 
