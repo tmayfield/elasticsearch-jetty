@@ -17,22 +17,23 @@ package com.sonian.elasticsearch.http.filter;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.common.Nullable;
-import org.elasticsearch.common.collect.ImmutableList;
 import org.elasticsearch.common.collect.MapBuilder;
 import org.elasticsearch.common.component.AbstractLifecycleComponent;
 import org.elasticsearch.common.inject.Inject;
-import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.settings.Settings.Builder;
 import org.elasticsearch.common.transport.BoundTransportAddress;
 import org.elasticsearch.http.HttpInfo;
 import org.elasticsearch.http.HttpServerAdapter;
 import org.elasticsearch.http.HttpServerTransport;
 import org.elasticsearch.http.HttpStats;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 import java.util.List;
 import java.util.Map;
 
-import static org.elasticsearch.common.collect.Lists.newArrayList;
 
 /**
  * @author imotov
@@ -63,7 +64,8 @@ public class FilterHttpServerTransport extends AbstractLifecycleComponent<HttpSe
                 FilterHttpServerAdapterFactory filterFactory = entry.getValue();
                 Settings filterSettings = filtersSettings.get(filterName);
                 if (filterSettings == null) {
-                    filterSettings = ImmutableSettings.Builder.EMPTY_SETTINGS;
+                    Settings.settingsBuilder();
+                    filterSettings = Builder.EMPTY_SETTINGS; 
                 }
                 filters.put(filterName, filterFactory.create(filterName, filterSettings));
             }
@@ -73,7 +75,7 @@ public class FilterHttpServerTransport extends AbstractLifecycleComponent<HttpSe
         filterMap = filters.immutableMap();
 
         String[] filterNames = componentSettings.getAsArray("http_filter_chain");
-        List<FilterHttpServerAdapter> filterList = newArrayList();
+        List<FilterHttpServerAdapter> filterList = Lists.newArrayList();
 
         for (String filterName : filterNames) {
             FilterHttpServerAdapter filter = filters.get(filterName);

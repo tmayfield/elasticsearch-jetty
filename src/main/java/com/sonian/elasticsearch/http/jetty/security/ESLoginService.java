@@ -6,12 +6,13 @@ import org.eclipse.jetty.server.UserIdentity;
 import org.eclipse.jetty.util.log.Log;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.index.IndexNotFoundException;
 import org.elasticsearch.index.get.GetField;
-import org.elasticsearch.indices.IndexMissingException;
+
+import com.google.common.collect.Lists;
 
 import java.util.List;
 
-import static org.elasticsearch.common.collect.Lists.newArrayList;
 
 /**
  * @author drewr
@@ -141,7 +142,7 @@ public class ESLoginService extends MappedLoginService {
                 String[] roles = getStringValues(response.getField(rolesField));
                 return putUser(user, credential, roles);
             }
-        } catch (IndexMissingException e) {
+        } catch (IndexNotFoundException e) {
             Log.warn("no auth index [{}]", authIndex);
         } catch (Exception e) {
             Log.warn("error finding user [" + user + "] in [" + authIndex + "]", e);
@@ -150,7 +151,7 @@ public class ESLoginService extends MappedLoginService {
     }
 
     private String[] getStringValues(GetField field) {
-        List<String> values = newArrayList();
+        List<String> values = Lists.newArrayList();
         if (field != null) {
             for(Object value : field.getValues()) {
                 if (field.getValue() instanceof Iterable) {
