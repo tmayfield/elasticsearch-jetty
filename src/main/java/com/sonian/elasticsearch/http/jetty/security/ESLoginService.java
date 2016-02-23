@@ -1,6 +1,6 @@
 package com.sonian.elasticsearch.http.jetty.security;
 
-import static com.google.common.collect.Lists.newArrayList;
+
 
 import java.util.List;
 
@@ -12,6 +12,8 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.IndexNotFoundException;
 import org.elasticsearch.index.get.GetField;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author drewr
@@ -150,7 +152,7 @@ public class ESLoginService extends MappedLoginService {
     }
 
     private String[] getStringValues(GetField field) {
-        List<String> values = newArrayList();
+        List<String> values = Lists.newArrayList();
         if (field != null) {
             for(Object value : field.getValues()) {
                 if (field.getValue() instanceof Iterable) {

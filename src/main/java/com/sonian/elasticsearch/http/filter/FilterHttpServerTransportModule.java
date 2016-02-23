@@ -15,8 +15,8 @@
  */
 package com.sonian.elasticsearch.http.filter;
 
-import com.sonian.elasticsearch.http.jetty.ESLoggerWrapper;
-import com.sonian.elasticsearch.http.jetty.JettyHttpServerTransport;
+import java.util.Map;
+
 import org.elasticsearch.common.inject.AbstractModule;
 import org.elasticsearch.common.inject.Scopes;
 import org.elasticsearch.common.inject.assistedinject.FactoryProvider;
@@ -25,7 +25,8 @@ import org.elasticsearch.common.settings.NoClassSettingsException;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.http.HttpServerTransport;
 
-import java.util.Map;
+import com.sonian.elasticsearch.http.jetty.ESLoggerWrapper;
+import com.sonian.elasticsearch.http.jetty.JettyHttpServerTransport;
 
 /**
  * @author imotov

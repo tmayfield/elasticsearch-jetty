@@ -20,12 +20,12 @@ import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.TypeUtil;
 import org.eclipse.jetty.util.security.Constraint;
 
+import com.google.common.collect.Maps;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-
-import static com.google.common.collect.Maps.newHashMap;
 
 /*
  * Handler to enforce SecurityConstraints. This implementation is
@@ -40,7 +40,7 @@ public class RestConstraintSecurityHandler extends SecurityHandler implements Co
 
     private final List<ConstraintMapping> constraintMappings = new CopyOnWriteArrayList<ConstraintMapping>();
     private final Set<String> roles = new CopyOnWriteArraySet<String>();
-    private final Map<String, RestPathMap<RoleInfo>> constraintMap = newHashMap();
+    private final Map<String, RestPathMap<RoleInfo>> constraintMap = Maps.newHashMap();
     private RoleInfo defaultRoleInfo = null;
     private boolean strict = true;
 
