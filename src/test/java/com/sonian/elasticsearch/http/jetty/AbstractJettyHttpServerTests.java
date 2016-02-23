@@ -15,27 +15,26 @@
  */
 package com.sonian.elasticsearch.http.jetty;
 
+import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Sets.newHashSet;
+import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
+
+import java.util.Map;
+import java.util.Set;
+
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.collect.MapBuilder;
 import org.elasticsearch.common.logging.ESLogger;
 import org.elasticsearch.common.logging.Loggers;
+import org.elasticsearch.common.network.NetworkAddress;
 import org.elasticsearch.common.network.NetworkUtils;
-import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.http.HttpServerTransport;
 import org.elasticsearch.node.Node;
-import org.elasticsearch.node.internal.InternalNode;
 import org.elasticsearch.plugins.PluginsService;
 
-import java.util.Map;
-import java.util.Set;
-
-import static org.elasticsearch.common.collect.Maps.*;
-import static org.elasticsearch.common.collect.Sets.*;
-import static org.elasticsearch.common.settings.ImmutableSettings.Builder.*;
-import static org.elasticsearch.common.settings.ImmutableSettings.*;
-import static org.elasticsearch.node.NodeBuilder.*;
+import com.google.common.net.InetAddresses;
 
 /**
  * @author imotov
@@ -49,7 +48,7 @@ public class AbstractJettyHttpServerTests {
 
     private Set<TransportClient> transportClients = newHashSet();
 
-    private Settings defaultSettings = ImmutableSettings
+    private Settings defaultSettings = Settings
             .settingsBuilder()
             .put("cluster.name", "test-cluster-" + NetworkUtils.getLocalAddress().getHostName())
             .put("sonian.elasticsearch.http.jetty.port", "9290-9300")

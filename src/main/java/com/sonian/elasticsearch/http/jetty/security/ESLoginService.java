@@ -1,17 +1,17 @@
 package com.sonian.elasticsearch.http.jetty.security;
 
-import org.eclipse.jetty.util.security.Credential;
-import org.eclipse.jetty.security.MappedLoginService;
-import org.eclipse.jetty.server.UserIdentity;
-import org.eclipse.jetty.util.log.Log;
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.index.get.GetField;
-import org.elasticsearch.indices.IndexMissingException;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.List;
 
-import static org.elasticsearch.common.collect.Lists.newArrayList;
+import org.eclipse.jetty.security.MappedLoginService;
+import org.eclipse.jetty.server.UserIdentity;
+import org.eclipse.jetty.util.log.Log;
+import org.eclipse.jetty.util.security.Credential;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.index.IndexNotFoundException;
+import org.elasticsearch.index.get.GetField;
 
 /**
  * @author drewr
@@ -141,7 +141,7 @@ public class ESLoginService extends MappedLoginService {
                 String[] roles = getStringValues(response.getField(rolesField));
                 return putUser(user, credential, roles);
             }
-        } catch (IndexMissingException e) {
+        } catch (IndexNotFoundException e) {
             Log.warn("no auth index [{}]", authIndex);
         } catch (Exception e) {
             Log.warn("error finding user [" + user + "] in [" + authIndex + "]", e);

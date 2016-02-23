@@ -23,16 +23,16 @@ import org.elasticsearch.common.inject.Module;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.http.HttpServerModule;
 import org.elasticsearch.http.HttpServerTransport;
-import org.elasticsearch.plugins.AbstractPlugin;
+import org.elasticsearch.plugins.Plugin;
 
 import java.util.Collection;
 
-import static org.elasticsearch.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author imotov
  */
-public class JettyPlugin extends AbstractPlugin {
+public class JettyPlugin extends Plugin {
 
     private final Settings settings;
     private Class<? extends HttpServerTransport> httpServerTransport;

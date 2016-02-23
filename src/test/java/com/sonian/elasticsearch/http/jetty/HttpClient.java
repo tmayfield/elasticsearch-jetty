@@ -31,7 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import static org.elasticsearch.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.newHashMap;
 
 /**
  * @author imotov

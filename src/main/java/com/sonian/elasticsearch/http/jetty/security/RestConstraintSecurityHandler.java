@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import static org.elasticsearch.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.newHashMap;
 
 /*
  * Handler to enforce SecurityConstraints. This implementation is
