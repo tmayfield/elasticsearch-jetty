@@ -9,7 +9,6 @@ import org.elasticsearch.common.inject.Binder;
 import org.elasticsearch.common.inject.Module;
 import org.elasticsearch.common.inject.binder.AnnotatedBindingBuilder;
 import org.elasticsearch.common.inject.binder.ScopedBindingBuilder;
-import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.NoClassSettingsException;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.http.HttpServer;
@@ -27,7 +26,7 @@ public class JettyPluginTests {
 
     @Test
     public void testModulesWithNoHttpType() throws Exception {
-        Settings settings = ImmutableSettings
+        Settings settings = Settings
                 .settingsBuilder()
                 .build();
         JettyPlugin plugin = new JettyPlugin(settings);
@@ -51,7 +50,7 @@ public class JettyPluginTests {
 
     @Test
     public void testModulesWithHttpTypeNettyOverridesAltType() throws Exception {
-        Settings settings = ImmutableSettings
+        Settings settings = Settings
                 .settingsBuilder()
                 .put("http.type", NettyHttpServerTransport.class.getName())
                 .put("sonian.elasticsearch.http.type", JettyHttpServerTransport.class.getName())
@@ -71,7 +70,7 @@ public class JettyPluginTests {
 
     @Test
     public void testModulesWithHttpTypeJetty() throws Exception {
-        Settings settings = ImmutableSettings
+        Settings settings = Settings
                 .settingsBuilder()
                 .put("http.type", JettyHttpServerTransport.class.getName())
                 .build();
@@ -96,7 +95,7 @@ public class JettyPluginTests {
 
     @Test
     public void testModulesWithAltHttpTypeJetty() throws Exception {
-        Settings settings = ImmutableSettings
+        Settings settings = Settings
                 .settingsBuilder()
                 .put("sonian.elasticsearch.http.type", JettyHttpServerTransport.class.getName())
                 .build();
@@ -121,7 +120,7 @@ public class JettyPluginTests {
 
     @Test
     public void testModulesWithHttpTypeFilter() throws Exception {
-        Settings settings = ImmutableSettings
+        Settings settings = Settings
                 .settingsBuilder()
                 .put("http.type", FilterHttpServerTransport.class.getName())
                 .build();
@@ -146,7 +145,7 @@ public class JettyPluginTests {
 
     @Test
     public void testModulesWithAltHttpTypeFilter() throws Exception {
-        Settings settings = ImmutableSettings
+        Settings settings = Settings
                 .settingsBuilder()
                 .put("sonian.elasticsearch.http.type", FilterHttpServerTransport.class.getName())
                 .build();
@@ -172,7 +171,7 @@ public class JettyPluginTests {
     @Test
     public void testModulesThrowsExceptionWithBadHttpType() throws Exception {
         String badClass = JettyHttpServerTransport.class.getPackage().getName() + ".JttyHttpServerTransport";
-        Settings settings = ImmutableSettings
+        Settings settings = Settings
                 .settingsBuilder()
                 .put("http.type", badClass)
                 .build();
@@ -187,7 +186,7 @@ public class JettyPluginTests {
 
     @Test
     public void testOnModuleInjectsTransportIntoHttpServerModule() {
-        Settings settings = ImmutableSettings
+        Settings settings = Settings
                 .settingsBuilder()
                 .build();
         JettyPlugin plugin = new JettyPlugin(settings);

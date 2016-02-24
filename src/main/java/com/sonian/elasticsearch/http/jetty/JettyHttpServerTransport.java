@@ -87,12 +87,12 @@ public class JettyHttpServerTransport extends AbstractLifecycleComponent<HttpSer
         super(settings);
         this.environment = environment;
         this.networkService = networkService;
-        this.port = componentSettings.get("port", settings.get("http.port", "9200-9300"));
-        this.bindHost = componentSettings.get("bind_host", settings.get("http.bind_host", settings.get("http.host")));
-        this.publishHost = componentSettings.get("publish_host", settings.get("http.publish_host", settings.get("http.host")));
-        this.jettyConfig = componentSettings.getAsArray("config", new String[]{"jetty.xml"});
-        this.jettyConfigServerId = componentSettings.get("server_id", "ESServer");
-        this.detailedErrorsEnabled = componentSettings.getAsBoolean("http.detailed_errors.enabled", true);
+        this.port = settings.get("port", settings.get("http.port", "9200-9300"));
+        this.bindHost = settings.get("bind_host", settings.get("http.bind_host", settings.get("http.host")));
+        this.publishHost = settings.get("publish_host", settings.get("http.publish_host", settings.get("http.host")));
+        this.jettyConfig = settings.getAsArray("config", new String[]{"jetty.xml"});
+        this.jettyConfigServerId = settings.get("server_id", "ESServer");
+        this.detailedErrorsEnabled = settings.getAsBoolean("http.detailed_errors.enabled", true);
         this.loggerWrapper = loggerWrapper;
         this.clusterName = clusterName;
         this.client = client;
@@ -267,10 +267,6 @@ public class JettyHttpServerTransport extends AbstractLifecycleComponent<HttpSer
         return settings;
     }
 
-    public Settings componentSettings() {
-        return componentSettings;
-    }
-
     private Map<String, String> jettySettings(String hostAddress, int port) {
         MapBuilder<String, String> jettySettings = MapBuilder.newMapBuilder();
         jettySettings.put("es.home", environment.homeFile().getAbsolutePath());
@@ -281,7 +277,7 @@ public class JettyHttpServerTransport extends AbstractLifecycleComponent<HttpSer
         if (hostAddress != null) {
             jettySettings.put("jetty.bind_host", hostAddress);
         }
-        for (Map.Entry<String, String> entry : componentSettings.getAsMap().entrySet()) {
+        for (Map.Entry<String, String> entry : settings.getAsMap().entrySet()) {
             jettySettings.put("jetty." + entry.getKey(), entry.getValue());
         }
         // Override jetty port in case we have a port-range

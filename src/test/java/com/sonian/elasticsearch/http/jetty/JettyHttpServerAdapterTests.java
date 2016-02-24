@@ -19,7 +19,7 @@ import static com.google.common.collect.Maps.newHashMap;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
-import com.google.common.collect.MapBuilder;
+import org.elasticsearch.common.collect.MapBuilder;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

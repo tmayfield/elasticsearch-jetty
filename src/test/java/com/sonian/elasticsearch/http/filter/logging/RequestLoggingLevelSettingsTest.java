@@ -15,7 +15,7 @@
  */
 package com.sonian.elasticsearch.http.filter.logging;
 
-import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,9 +31,9 @@ public class RequestLoggingLevelSettingsTest {
 
     @Test
     public void testUpdateSettings() throws Exception {
-        RequestLoggingLevelSettings settings = new RequestLoggingLevelSettings(ImmutableSettings.settingsBuilder().build());
+        RequestLoggingLevelSettings settings = new RequestLoggingLevelSettings(Settings.settingsBuilder().build());
 
-        settings.updateSettings(ImmutableSettings.settingsBuilder()
+        settings.updateSettings(Settings.settingsBuilder()
                 .put("level", "INFO")
                 .put("log_body", false)
                 .putArray("loggers.stats.path", new String[]{"/_cluster/health", "/_cluster/nodes", "/_cluster/state",
