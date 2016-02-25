@@ -19,7 +19,7 @@ import com.sonian.elasticsearch.http.filter.FilterHttpServerTransport;
 import com.sonian.elasticsearch.http.jetty.AbstractJettyHttpServerTests;
 import com.sonian.elasticsearch.http.jetty.HttpClientResponse;
 import org.elasticsearch.common.logging.ESLoggerFactory;
-import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.testng.annotations.AfterMethod;
@@ -42,7 +42,7 @@ public class JsonLoggingFilterHttpServerAdapterTests extends AbstractJettyHttpSe
     public void setup() {
         mockESLoggerFactory = new MockESLoggerFactory("INFO", "com.sonian.elasticsearch.http.filter.jsonlog");
         ESLoggerFactory.setDefaultFactory(mockESLoggerFactory);
-        putDefaultSettings(Settings.settingsBuilder()
+        putDefaultSettings(ImmutableSettings.settingsBuilder()
                 .put("sonian.elasticsearch.http.type", FilterHttpServerTransport.class.getName())
         );
     }
@@ -65,7 +65,7 @@ public class JsonLoggingFilterHttpServerAdapterTests extends AbstractJettyHttpSe
         httpClient("server1").request("POST", "_search", data);
         // Should start with logging for the POST /_search request
         Map<String, Object> logJson = XContentFactory.xContent(XContentType.JSON)
-                .createParser(mockESLoggerFactory.getMessage().substring(5)).map();
+                .createParser(mockESLoggerFactory.getMessage().substring(5)).mapAndClose();
         assertThat((Integer) logJson.get("size"), greaterThan(100));
         assertThat((String) logJson.get("data"), equalTo("{\"query\":{\"query_string\":{\"query\":\"user:kimchy\"}}}"));
     }

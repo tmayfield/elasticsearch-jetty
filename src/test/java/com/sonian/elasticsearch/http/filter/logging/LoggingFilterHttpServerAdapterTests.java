@@ -19,8 +19,9 @@ import com.sonian.elasticsearch.http.filter.FilterHttpServerTransport;
 import com.sonian.elasticsearch.http.jetty.AbstractJettyHttpServerTests;
 import com.sonian.elasticsearch.http.jetty.HttpClientResponse;
 import org.elasticsearch.common.logging.ESLoggerFactory;
-import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.http.HttpServerTransport;
+import org.elasticsearch.node.internal.InternalNode;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -44,7 +45,7 @@ public class LoggingFilterHttpServerAdapterTests extends AbstractJettyHttpServer
     public void setup() {
         mockESLoggerFactory = new MockESLoggerFactory("INFO", "com.sonian.elasticsearch.http.filter.logging");
         ESLoggerFactory.setDefaultFactory(mockESLoggerFactory);
-        putDefaultSettings(Settings.settingsBuilder()
+        putDefaultSettings(ImmutableSettings.settingsBuilder()
                 .put("sonian.elasticsearch.http.type", FilterHttpServerTransport.class.getName())
         );
     }
@@ -76,7 +77,7 @@ public class LoggingFilterHttpServerAdapterTests extends AbstractJettyHttpServer
     public void testLoggingSettings() throws Exception {
         startNode("server1");
         FilterHttpServerTransport filterHttpServerTransport = (FilterHttpServerTransport)
-                (node("server1")).injector().getInstance(HttpServerTransport.class);
+                ((InternalNode) node("server1")).injector().getInstance(HttpServerTransport.class);
         LoggingFilterHttpServerAdapter logging = (LoggingFilterHttpServerAdapter) filterHttpServerTransport.filter("logging");
         assertThat(logging.requestLoggingLevelSettings().getLoggingLevel(GET, "/_bulk").logBody(), equalTo(false));
         assertThat(logging.requestLoggingLevelSettings().getLoggingLevel(GET, "/idx/_bulk").logBody(), equalTo(false));
@@ -86,7 +87,7 @@ public class LoggingFilterHttpServerAdapterTests extends AbstractJettyHttpServer
     @Test
     public void testEmptyLoggingSettings() throws Exception {
         // Replace logger with custom settings with logger2 with default settings
-        putDefaultSettings(Settings.settingsBuilder()
+        putDefaultSettings(ImmutableSettings.settingsBuilder()
                 .putArray("sonian.elasticsearch.http.filter.http_filter_chain", "timeout", "logging2")
                 .put("sonian.elasticsearch.http.filter.http_filter.logging2.type",
                         "com.sonian.elasticsearch.http.filter.logging.LoggingFilterHttpServerAdapter")

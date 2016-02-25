@@ -21,6 +21,7 @@ import org.elasticsearch.common.collect.MapBuilder;
 import org.elasticsearch.common.component.AbstractLifecycleComponent;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.settings.Settings.Builder;
 import org.elasticsearch.common.transport.BoundTransportAddress;
 import org.elasticsearch.http.HttpInfo;
 import org.elasticsearch.http.HttpServerAdapter;
@@ -55,7 +56,7 @@ public class FilterHttpServerTransport extends AbstractLifecycleComponent<HttpSe
         MapBuilder<String, FilterHttpServerAdapter> filters = MapBuilder.newMapBuilder();
 
         if (filterHttpServerAdapterFactoryMap != null) {
-            Map<String, Settings> filtersSettings = settings.getGroups("http_filter");
+            Map<String, Settings> filtersSettings = componentSettings.getGroups("http_filter");
 
             for (Map.Entry<String, FilterHttpServerAdapterFactory> entry : filterHttpServerAdapterFactoryMap.entrySet()) {
                 String filterName = entry.getKey();
@@ -72,7 +73,7 @@ public class FilterHttpServerTransport extends AbstractLifecycleComponent<HttpSe
 
         filterMap = filters.immutableMap();
 
-        String[] filterNames = settings.getAsArray("http_filter_chain");
+        String[] filterNames = componentSettings.getAsArray("http_filter_chain");
         List<FilterHttpServerAdapter> filterList = Lists.newArrayList();
 
         for (String filterName : filterNames) {
