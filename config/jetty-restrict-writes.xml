@@ -217,7 +217,7 @@
                     <New class="org.eclipse.jetty.security.ConstraintMapping">
                         <Set name="method">HEAD</Set>
                         <Set name="pathSpec">
-                            /{index}/{type}/{id}
+                            /{index}/{type},/{index}/{type}/{id}
                         </Set>
                         <Set name="constraint">
                             <Ref id="ReadOnlyUserDataSecurityConstraint"/>
